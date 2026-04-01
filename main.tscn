@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://csim4rc8ijhya"]
+
+[ext_resource type="PackedScene" uid="uid://d7kdhtghuxoh" path="res://ball.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://n61jkv47v132" path="res://player.tscn" id="2_0xm2m"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0xm2m"]
+bounce = 0.61
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_h2yge"]
+normal = Vector2(-1, 0)
+distance = -0.22777511
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0xm2m"]
+normal = Vector2(1, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ig7tw"]
+size = Vector2(1024, 105)
+
+[node name="Main" type="Node"]
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+color = Color(0, 0.039215688, 0.99607843, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="Background"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -104.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.5176471, 0.5176471, 0.5176471, 1)
+
+[node name="Player1" parent="." instance=ExtResource("2_0xm2m")]
+position = Vector2(512, 375)
+
+[node name="Ball" parent="." instance=ExtResource("1_ig7tw")]
+position = Vector2(512, 190)
+mass = 0.1
+gravity_scale = 0.5
+contact_monitor = true
+max_contacts_reported = 4
+script = null
+
+[node name="Boundaries" type="StaticBody2D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_0xm2m")
+
+[node name="RightWall" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(1024, 0)
+shape = SubResource("WorldBoundaryShape2D_h2yge")
+one_way_collision_margin = 30.5
+
+[node name="LeftWall" type="CollisionShape2D" parent="Boundaries"]
+shape = SubResource("WorldBoundaryShape2D_0xm2m")
+
+[node name="Floor" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(512, 524.5)
+shape = SubResource("RectangleShape2D_ig7tw")
