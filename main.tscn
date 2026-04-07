@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://csim4rc8ijhya"]
+[gd_scene load_steps=9 format=3 uid="uid://csim4rc8ijhya"]
 
 [ext_resource type="PackedScene" uid="uid://d7kdhtghuxoh" path="res://ball.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://n61jkv47v132" path="res://player.tscn" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://ba5k75qpjx06q" path="res://ball.gd" id="3_h2yge"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0xm2m"]
 bounce = 0.61
@@ -15,6 +16,9 @@ normal = Vector2(1, 0)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ig7tw"]
 size = Vector2(1024, 105)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_h2yge"]
+bounce = 0.1
 
 [node name="Main" type="Node"]
 
@@ -42,15 +46,7 @@ grow_vertical = 0
 color = Color(0.5176471, 0.5176471, 0.5176471, 1)
 
 [node name="Player1" parent="." instance=ExtResource("2_0xm2m")]
-position = Vector2(512, 375)
-
-[node name="Ball" parent="." instance=ExtResource("1_ig7tw")]
-position = Vector2(512, 190)
-mass = 0.1
-gravity_scale = 0.5
-contact_monitor = true
-max_contacts_reported = 4
-script = null
+position = Vector2(197, 472)
 
 [node name="Boundaries" type="StaticBody2D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_0xm2m")
@@ -66,3 +62,12 @@ shape = SubResource("WorldBoundaryShape2D_0xm2m")
 [node name="Floor" type="CollisionShape2D" parent="Boundaries"]
 position = Vector2(512, 524.5)
 shape = SubResource("RectangleShape2D_ig7tw")
+
+[node name="Ball" parent="." instance=ExtResource("1_ig7tw")]
+position = Vector2(512, 255)
+scale = Vector2(1, 1.0216722)
+mass = 30.0
+physics_material_override = SubResource("PhysicsMaterial_h2yge")
+gravity_scale = 2.5
+linear_damp = 4.0
+script = ExtResource("3_h2yge")

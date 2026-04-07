@@ -1,20 +1,40 @@
-[gd_scene load_steps=4 format=3 uid="uid://d7kdhtghuxoh"]
+[gd_scene load_steps=5 format=3 uid="uid://d7kdhtghuxoh"]
 
-[ext_resource type="Script" uid="uid://ba5k75qpjx06q" path="res://ball.gd" id="1_41u45"]
 [ext_resource type="Texture2D" uid="uid://cx8dbmgxeimo6" path="res://art/textures/ball.res_suffix.png" id="1_x8fbi"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_41u45"]
+bounce = 0.2
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_41u45"]
-radius = 461.03903
+radius = 59.999992
+
+[sub_resource type="GDScript" id="GDScript_41u45"]
+script/source = "extends CollisionShape2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	pass
+"
 
 [node name="Ball" type="RigidBody2D"]
-mass = 0.55
-script = ExtResource("1_41u45")
+collision_layer = 5
+mass = 50.0
+physics_material_override = SubResource("PhysicsMaterial_41u45")
+gravity_scale = 10.0
+linear_damp = 1.2
 
 [node name="Color" type="Sprite2D" parent="."]
-scale = Vector2(0.05, 0.05)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_x8fbi")
 
 [node name="HitBox" type="CollisionShape2D" parent="."]
-scale = Vector2(0.05, 0.05)
+scale = Vector2(0.25, 0.25)
 shape = SubResource("CircleShape2D_41u45")
 debug_color = Color(0.89805126, 0.24451897, 0.5112168, 0.41960785)
+script = SubResource("GDScript_41u45")
