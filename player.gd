@@ -26,6 +26,7 @@ func handle_inputs() -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 func handle_collisions() -> void:
+	print(ball_on_top)
 	var _collisions = move_and_slide()
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
@@ -67,12 +68,11 @@ func _physics_process(delta: float) -> void:
 func _draw() -> void:
 	draw_colored_polygon($HitBox.polygon, "red")
 
-
 func _on_below_detector_body_entered(body: Ball) -> void:
 	ball_on_top = true
 	var slime_position_y: float = global_position.y
 	var ball_hit_box: CollisionShape2D = body.get_node("HitBox")
-	var ball_radius: float = ball_hit_box.shape.radius * 2 * ball_hit_box.scale.x
+	var ball_radius: float = ball_hit_box.shape.radius * 4 * ball_hit_box.scale.x
 	var ball_position: Vector2 = body.global_position
 	var new_position : Vector2 = Vector2(ball_position.x, slime_position_y - slime_half_height - ball_radius)
 	body.teleport_to(new_position)
