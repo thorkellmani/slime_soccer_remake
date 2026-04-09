@@ -18,7 +18,8 @@ normal = Vector2(1, 0)
 size = Vector2(1024, 105)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_h2yge"]
-bounce = 0.1
+friction = 0.5
+bounce = 0.2
 
 [node name="Main" type="Node"]
 
@@ -48,6 +49,8 @@ color = Color(0.5176471, 0.5176471, 0.5176471, 1)
 [node name="Player1" parent="." instance=ExtResource("2_0xm2m")]
 position = Vector2(197, 472)
 
+[node name="Player2" parent="." instance=ExtResource("2_0xm2m")]
+
 [node name="Boundaries" type="StaticBody2D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_0xm2m")
 
@@ -66,8 +69,9 @@ shape = SubResource("RectangleShape2D_ig7tw")
 [node name="Ball" parent="." instance=ExtResource("1_ig7tw")]
 position = Vector2(512, 255)
 scale = Vector2(1, 1.0216722)
+collision_layer = 6
 mass = 30.0
 physics_material_override = SubResource("PhysicsMaterial_h2yge")
 gravity_scale = 2.5
-linear_damp = 4.0
+linear_damp = 0.5
 script = ExtResource("3_h2yge")

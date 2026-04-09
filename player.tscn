@@ -22,4 +22,13 @@ collision_mask = 4
 position = Vector2(0, 2.280973)
 shape = SubResource("RectangleShape2D_4flbx")
 
+[node name="BallDetector" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="BallHitHBox" type="CollisionPolygon2D" parent="BallDetector"]
+polygon = PackedVector2Array(-75, -6.5567083e-06, -74.638855, -7.3512774, -73.5589, -14.631768, -71.77052, -21.771347, -69.29096, -28.701258, -66.14409, -35.35476, -62.360214, -41.667774, -57.975792, -47.57949, -53.033012, -53.033005, -47.5795, -57.975784, -41.66778, -62.36021, -35.35475, -66.1441, -28.701267, -69.29096, -21.771341, -71.77052, -14.631779, -73.55889, -7.3512697, -74.638855, 8.9436605e-07, -75, 7.3512716, -74.638855, 14.631781, -73.55889, 21.771343, -71.77052, 28.701271, -69.290955, 35.354755, -66.1441, 41.667755, -62.36023, 47.5795, -57.975784, 53.032997, -53.033016, 57.975792, -47.579487, 62.360218, -41.667774, 66.144104, -35.35474, 69.29097, -28.701258, 71.77052, -21.771362, 73.5589, -14.631767, 74.638855, -7.3512936, 75, 1.3113417e-05)
+
 [connection signal="body_entered" from="BelowDetector" to="." method="_on_below_detector_body_entered"]
+[connection signal="body_entered" from="BallDetector" to="." method="_on_ball_detector_body_entered"]
+[connection signal="body_exited" from="BallDetector" to="." method="_on_ball_detector_body_exited"]

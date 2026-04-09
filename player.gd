@@ -2,14 +2,15 @@ extends CharacterBody2D
 
 const SPEED = 400.0
 const JUMP_VELOCITY = -1400.0
-const KICK_IMPACT: float = 10000.0
+const BASE_IMPACT: float = 200.0
+const IMPACT_SCALE: float = 40.0
+
 const GRAVITY_SCALE: Vector2 = Vector2(1, 5)
 
 var slime_half_height: float = 0
-var ball_on_top: bool = false
+var kick_cooldown: float = 0.0
 
 func _ready() -> void:
-	print($HitBox)
 	var min_y: float = INF                                               
 	var max_y: float = -INF
 	for p in $HitBox.polygon:                                            
@@ -23,27 +24,25 @@ func handle_inputs() -> void:
 	if direction:
 		velocity.x = direction * SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-
-func handle_collisions() -> void:
-	print(ball_on_top)
-	var _collisions = move_and_slide()
-	for i in get_slide_collision_count():
-		var collision = get_slide_collision(i)
-		var collider = collision.get_collider()
-		if collider.name == "Ball" && !ball_on_top:
-			kick_ball(collider, collision.get_normal())
-			break
-
-
-func kick_ball(ball: RigidBody2D, normal: Vector2 ) -> void:
+		velocity.x = 0
+		
+func kick_ball(ball: Ball, normal: Vector2) -> void:
 	#if normal.x == 0.0:
 		#teleport_ball_on_top(ball)
-		
-	print("KICK BALl")
-	var impulse: Vector2 = Vector2(-normal * KICK_IMPACT)
+	print("KICK")
+	print(normal)
+	var impulse =  -normal * (BASE_IMPACT + IMPACT_SCALE * velocity.length())      
 	ball.apply_impulse(impulse)
+	print(impulse)
 	
+func teleport_ball(ball: Ball):
+	print("TELEPORT")
+	var slime_position_y: float = global_position.y
+	var ball_hit_box: CollisionShape2D = ball.get_node("HitBox")
+	var ball_radius: float = ball_hit_box.shape.radius * 4 * ball_hit_box.scale.x
+	var ball_position: Vector2 = ball.global_position
+	var new_position : Vector2 = Vector2(ball_position.x, slime_position_y - slime_half_height - ball_radius)
+	ball.teleport_to(new_position)
 
 #func teleport_ball_on_top(ball: RigidBody2D):
 	#var anchor = global_position
@@ -62,17 +61,29 @@ func apply_gravity(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
 	handle_inputs()
-	handle_collisions()
+	move_and_slide()
+	
+	if kick_cooldown > 0.0:
+		kick_cooldown = maxf(kick_cooldown - delta, 0.0)               
 
 
 func _draw() -> void:
 	draw_colored_polygon($HitBox.polygon, "red")
 
-func _on_below_detector_body_entered(body: Ball) -> void:
-	ball_on_top = true
-	var slime_position_y: float = global_position.y
-	var ball_hit_box: CollisionShape2D = body.get_node("HitBox")
-	var ball_radius: float = ball_hit_box.shape.radius * 4 * ball_hit_box.scale.x
-	var ball_position: Vector2 = body.global_position
-	var new_position : Vector2 = Vector2(ball_position.x, slime_position_y - slime_half_height - ball_radius)
-	body.teleport_to(new_position)
+
+func _on_ball_detector_body_entered(body: Ball) -> void:
+	print("in ball detector")
+	print("cooldown " + str(kick_cooldown))
+	if kick_cooldown <= 0.0:
+		print("kick_cooldow passed")
+		var normal = (global_position - body.global_position).normalized()
+		kick_cooldown = .3
+		if normal.y < 0:
+			print("ball below")
+			teleport_ball(body)
+		else:
+			kick_ball(body, normal)
+			
+
+func _on_ball_detector_body_exited(body: Node2D) -> void:
+	pass # Replace with functidon body.

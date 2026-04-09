@@ -55,6 +55,8 @@ jump_alternate={
 
 [layer_names]
 
+2d_physics/layer_1="Boundaries"
+2d_physics/layer_2="Ball"
 2d_physics/layer_3="Below layer"
 
 [physics]
