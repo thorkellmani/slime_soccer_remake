@@ -58,6 +58,8 @@ jump_alternate={
 2d_physics/layer_1="Boundaries"
 2d_physics/layer_2="Ball"
 2d_physics/layer_3="Below layer"
+2d_physics/layer_4="Player 1"
+2d_physics/layer_5="Player 2"
 
 [physics]
 

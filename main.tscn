@@ -47,9 +47,22 @@ grow_vertical = 0
 color = Color(0.5176471, 0.5176471, 0.5176471, 1)
 
 [node name="Player1" parent="." instance=ExtResource("2_0xm2m")]
-position = Vector2(197, 472)
+position = Vector2(248, 472)
+collision_layer = 8
+color = Color(0.8745098, 0, 0, 1)
+action_left = &"move_left"
+action_right = &"move_right"
+action_up = &"jump"
+orientation = &"right"
 
 [node name="Player2" parent="." instance=ExtResource("2_0xm2m")]
+position = Vector2(776, 472)
+collision_layer = 16
+color = Color(0.28813738, 0.43212512, 0.8451805, 1)
+action_left = &"move_left_alternate"
+action_right = &"move_right_alternate"
+action_up = &"jump_alternate"
+orientation = &"left"
 
 [node name="Boundaries" type="StaticBody2D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_0xm2m")
