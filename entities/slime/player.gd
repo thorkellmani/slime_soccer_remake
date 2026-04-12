@@ -12,6 +12,7 @@ const GRAVITY_SCALE: Vector2 = Vector2(1, 5)
 @export var action_right: StringName
 @export var action_up: StringName
 @export var orientation: StringName
+@export var player: StringName
 
 var slime_half_height: float = 0
 var kick_cooldown: float = 0.0
@@ -25,8 +26,14 @@ func _ready() -> void:
 		
 	slime_half_height = abs((min_y - max_y) / 2)   
 	
+	if player == "1":
+		get_node("../Background/GoalLineTimer1").color = color
+	else:
+		get_node("../Background/GoalLineTimer2").color = color
+	
+	
 	if orientation == "left":
-		$Eye.position.x = -$Eye.position.x
+		scale.x *= -1
 	
 func handle_inputs() -> void:
 	var direction := Input.get_axis(action_left, action_right)
@@ -56,6 +63,9 @@ func apply_gravity(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 func _physics_process(delta: float) -> void:
+	if !GameState.movement_enabled:
+		return
+		
 	apply_gravity(delta)
 	handle_inputs()
 	move_and_slide()
@@ -66,7 +76,9 @@ func _physics_process(delta: float) -> void:
 
 func _draw() -> void:
 	draw_colored_polygon($HitBox.polygon, color)
-
+	if GameState.player_state[player].smiling:
+		draw_arc($SmileReference.position, 35.0, deg_to_rad(45), deg_to_rad(150), 15, Color.BLACK, 1.0, true)
+	
 
 func _on_ball_detector_body_entered(body: Ball) -> void:
 	if kick_cooldown <= 0.0:
@@ -76,3 +88,8 @@ func _on_ball_detector_body_entered(body: Ball) -> void:
 			teleport_ball(body)
 		else:
 			kick_ball(body, normal)
+
+
+func _on_main_smile_update() -> void:
+	if GameState.player_state[player].smiling:
+		queue_redraw()

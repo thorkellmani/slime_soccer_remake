@@ -2,10 +2,13 @@ extends Node2D
 
 @export var player: StringName
 
-signal conceded(player: StringName)
+signal conceded(conceder: StringName)
+signal goaltended(goaltender: StringName)
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$GoaltendingZone/GoaltendingTimer.wait_time = GameState.GOALTEND_TIME
 	pass # Replace with function body.
 
 
@@ -34,8 +37,28 @@ func _draw() -> void:
 			var next_x = base.x + (i * (interval_x - .3))
 			draw_line(Vector2(next_x, base.y), Vector2(next_x, box_size.y / 2), Color.WHITE, 2.0)
 
+func reset_goaltend_timer() -> void:
+	$GoaltendingZone/GoaltendingTimer.wait_time = 3.0
+	
 
 func _on_goal_area_body_entered(_body: Node2D) -> void:
-	print("body entered")
 	conceded.emit(player)
-	pass # Replace with function body.lace with function body.
+	
+func _on_goaltending_timer_timeout() -> void:
+	goaltended.emit(player)
+
+func _on_goaltending_zone_body_entered(body: Node2D) -> void:
+	if body.name != "Player" + player:
+		return
+	if $GoaltendingZone/GoaltendingTimer.is_stopped():
+		$GoaltendingZone/GoaltendingTimer.start()
+
+func _on_goaltending_zone_body_exited(body: Node2D) -> void:
+	if body.name != "Player" + player:
+		return
+	$GoaltendingZone/GoaltendingTimer.stop()
+	reset_goaltend_timer()
+
+
+func _on_game_state_smile_update() -> void:
+	pass # Replace with function body.

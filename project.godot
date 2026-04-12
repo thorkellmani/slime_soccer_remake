@@ -13,7 +13,12 @@ config_version=5
 config/name="slime_soccer"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.5", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://art/icon.svg"
+
+[autoload]
+
+GameState="*res://game_state.gd"
+Nations="*res://nations.gd"
 
 [display]
 

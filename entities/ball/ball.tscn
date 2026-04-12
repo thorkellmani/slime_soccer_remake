@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cx8dbmgxeimo6" path="res://art/textures/ball.res_suffix.png" id="1_x8fbi"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_41u45"]
+friction = 0.5
 bounce = 0.2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_41u45"]
@@ -25,10 +26,10 @@ func _process(_delta: float) -> void:
 [node name="Ball" type="RigidBody2D"]
 collision_layer = 2
 collision_mask = 57
-mass = 50.0
+mass = 30.0
 physics_material_override = SubResource("PhysicsMaterial_41u45")
-gravity_scale = 10.0
-linear_damp = 1.2
+gravity_scale = 2.5
+linear_damp = 0.5
 
 [node name="Color" type="Sprite2D" parent="."]
 scale = Vector2(0.25, 0.25)
