@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://djb547viidwbu"]
+
+[ext_resource type="Script" uid="uid://cduycjqposbn4" path="res://goal.gd" id="1_6k3qi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sep42"]
+size = Vector2(64, 144)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6k3qi"]
+size = Vector2(80, 15)
+
+[node name="Goal" type="Node2D"]
+script = ExtResource("1_6k3qi")
+
+[node name="GoalArea" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 2
+
+[node name="HitBox" type="CollisionShape2D" parent="GoalArea"]
+position = Vector2(-8, 8)
+shape = SubResource("RectangleShape2D_sep42")
+debug_color = Color(0.6018196, 0.41741472, 0.89067113, 0.41960785)
+
+[node name="TopBar" type="StaticBody2D" parent="."]
+visible = false
+position = Vector2(0, -80)
+collision_layer = 32
+collision_mask = 0
+
+[node name="BarHitbox" type="CollisionShape2D" parent="TopBar"]
+position = Vector2(0, 7.5)
+shape = SubResource("RectangleShape2D_6k3qi")
+
+[connection signal="body_entered" from="GoalArea" to="." method="_on_goal_area_body_entered"]

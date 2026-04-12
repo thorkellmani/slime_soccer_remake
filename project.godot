@@ -60,6 +60,7 @@ jump_alternate={
 2d_physics/layer_3="Below layer"
 2d_physics/layer_4="Player 1"
 2d_physics/layer_5="Player 2"
+2d_physics/layer_6="Goals"
 
 [physics]
 

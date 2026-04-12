@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://csim4rc8ijhya"]
+[gd_scene load_steps=11 format=3 uid="uid://csim4rc8ijhya"]
 
 [ext_resource type="PackedScene" uid="uid://d7kdhtghuxoh" path="res://ball.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://cn52lrejgmff6" path="res://main.gd" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://n61jkv47v132" path="res://player.tscn" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://ba5k75qpjx06q" path="res://ball.gd" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://djb547viidwbu" path="res://goal.tscn" id="4_1bvp3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0xm2m"]
 bounce = 0.61
@@ -22,6 +24,7 @@ friction = 0.5
 bounce = 0.2
 
 [node name="Main" type="Node"]
+script = ExtResource("1_lquwl")
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -1
@@ -45,6 +48,33 @@ offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 color = Color(0.5176471, 0.5176471, 0.5176471, 1)
+
+[node name="Scores" type="GridContainer" parent="Background"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 32.0
+offset_right = -32.0
+offset_bottom = 63.0
+grow_horizontal = 2
+columns = 3
+
+[node name="Player1Score" type="Label" parent="Background/Scores"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "PLAYER 1"
+
+[node name="Timer" type="Label" parent="Background/Scores"]
+layout_mode = 2
+size_flags_vertical = 10
+text = "Timer"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Player2Score" type="Label" parent="Background/Scores"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "PLAYER 2"
+horizontal_alignment = 2
 
 [node name="Player1" parent="." instance=ExtResource("2_0xm2m")]
 position = Vector2(248, 472)
@@ -88,3 +118,19 @@ physics_material_override = SubResource("PhysicsMaterial_h2yge")
 gravity_scale = 2.5
 linear_damp = 0.5
 script = ExtResource("3_h2yge")
+
+[node name="Goal1" parent="." instance=ExtResource("4_1bvp3")]
+position = Vector2(40, 392)
+player = &"1"
+
+[node name="Goal2" parent="." instance=ExtResource("4_1bvp3")]
+position = Vector2(1000, 392)
+player = &"2"
+
+[node name="MatchTime" type="Timer" parent="."]
+wait_time = 120.0
+one_shot = true
+autostart = true
+
+[connection signal="conceded" from="Goal1" to="." method="_on_goal_conceded"]
+[connection signal="conceded" from="Goal2" to="." method="_on_goal_conceded"]
