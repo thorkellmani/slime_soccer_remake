@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://csim4rc8ijhya"]
+[gd_scene load_steps=15 format=3 uid="uid://csim4rc8ijhya"]
 
 [ext_resource type="PackedScene" uid="uid://d7kdhtghuxoh" path="res://entities/ball/ball.tscn" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://cn52lrejgmff6" path="res://main.gd" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://n61jkv47v132" path="res://entities/slime/player.tscn" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://b43jujmsrihpi" path="res://game_menu.gd" id="2_kek77"]
 [ext_resource type="Script" uid="uid://ba5k75qpjx06q" path="res://entities/ball/ball.gd" id="3_h2yge"]
 [ext_resource type="PackedScene" uid="uid://djb547viidwbu" path="res://entities/goal/goal.tscn" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://dtymkggq2sfvi" path="res://game_state.gd" id="6_7mycd"]
@@ -39,7 +40,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
-color = Color(0, 0.039215688, 0.99607843, 1)
+color = Color(0.27058825, 0.24705882, 0.5921569, 1)
 metadata/_edit_lock_ = true
 
 [node name="Ground" type="ColorRect" parent="Background"]
@@ -106,27 +107,60 @@ grow_vertical = 2
 rotation = 3.1415927
 metadata/_edit_lock_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Background"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="GameMenu" type="HBoxContainer" parent="Background"]
+process_mode = 3
+anchors_preset = -1
+anchor_top = 0.186
+anchor_right = 1.0
+anchor_bottom = 0.32200003
+offset_left = 67.0
+offset_top = -0.13600159
+offset_right = -64.0
+offset_bottom = -0.47201538
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_kek77")
+
+[node name="1Min" type="Button" parent="Background/GameMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1 Minute"
+
+[node name="2Min" type="Button" parent="Background/GameMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2 Minutes
+"
+
+[node name="4Min" type="Button" parent="Background/GameMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "4 Minutes
+"
+
+[node name="8Min" type="Button" parent="Background/GameMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "8 Minutes
+"
 
 [node name="Player1" parent="." instance=ExtResource("2_0xm2m")]
 position = Vector2(248, 472)
 collision_layer = 8
-color = Color(0.8745098, 0, 0, 1)
 action_left = &"move_left"
 action_right = &"move_right"
 action_up = &"jump"
+action_down = &"down"
 orientation = &"right"
 player = &"1"
 
 [node name="Player2" parent="." instance=ExtResource("2_0xm2m")]
 position = Vector2(776, 472)
 collision_layer = 16
-color = Color(0.28813738, 0.43212512, 0.8451805, 1)
 action_left = &"move_left_alternate"
 action_right = &"move_right_alternate"
 action_up = &"jump_alternate"
+action_down = &"down_alternate"
 orientation = &"left"
 player = &"2"
 
@@ -237,10 +271,52 @@ grow_vertical = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="GameOverContainer" type="VBoxContainer" parent="HUD"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -103.0
+offset_top = -90.0
+offset_right = 104.0
+offset_bottom = -46.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MatchOverLabel" type="Label" parent="HUD/GameOverContainer"]
+layout_mode = 2
+text = "And thats the final whistle!"
+
+[node name="FinalScoreContainer" type="HBoxContainer" parent="HUD/GameOverContainer"]
+layout_mode = 2
+
+[node name="Player1" type="Label" parent="HUD/GameOverContainer/FinalScoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+
+[node name="Score" type="Label" parent="HUD/GameOverContainer/FinalScoreContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="Player2" type="Label" parent="HUD/GameOverContainer/FinalScoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [connection signal="smile_update" from="." to="Player1" method="_on_main_smile_update"]
 [connection signal="smile_update" from="." to="Player2" method="_on_main_smile_update"]
+[connection signal="length_picked" from="Background/GameMenu" to="." method="_on_game_length_picked"]
+[connection signal="pressed" from="Background/GameMenu/1Min" to="Background/GameMenu" method="_on_min_1_pressed"]
+[connection signal="pressed" from="Background/GameMenu/2Min" to="Background/GameMenu" method="_on_min_2_pressed"]
+[connection signal="pressed" from="Background/GameMenu/4Min" to="Background/GameMenu" method="_on_min_4_pressed"]
+[connection signal="pressed" from="Background/GameMenu/8Min" to="Background/GameMenu" method="_on_min_8_pressed"]
+[connection signal="nation_update" from="Player1" to="." method="_on_player_nation_update"]
+[connection signal="nation_update" from="Player2" to="." method="_on_player_nation_update"]
 [connection signal="conceded" from="Goal1" to="." method="_on_goal_conceded"]
 [connection signal="goaltended" from="Goal1" to="." method="_on_goaltend"]
 [connection signal="conceded" from="Goal2" to="." method="_on_goal_conceded"]
 [connection signal="goaltended" from="Goal2" to="." method="_on_goaltend"]
+[connection signal="timeout" from="MatchTime" to="." method="_on_match_end"]
 [connection signal="timeout" from="OnScoreTimer" to="." method="prepare_new_round"]

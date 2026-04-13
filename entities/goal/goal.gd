@@ -58,7 +58,3 @@ func _on_goaltending_zone_body_exited(body: Node2D) -> void:
 		return
 	$GoaltendingZone/GoaltendingTimer.stop()
 	reset_goaltend_timer()
-
-
-func _on_game_state_smile_update() -> void:
-	pass # Replace with function body.
